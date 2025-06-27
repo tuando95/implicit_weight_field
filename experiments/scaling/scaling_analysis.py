@@ -1,5 +1,14 @@
 """Scaling analysis for compression performance vs tensor/model size."""
 
+import os
+import sys
+
+# Add project root to path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(current_dir))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import torch
 import torch.nn as nn
 import torchvision
@@ -13,11 +22,8 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from tqdm import tqdm
 
-from core.implicit_field import (
-    ImplicitWeightField,
-    CompressionConfig,
-    TensorStatistics
-)
+from core.implicit_field import ImplicitWeightField
+from configs.config import CompressionConfig
 from compression.trainer import FieldTrainer, TrainingConfig
 from experiments.models import (
     load_resnet50,

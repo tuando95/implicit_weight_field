@@ -1,5 +1,14 @@
 """Ablation study runner implementing systematic parameter variation."""
 
+import os
+import sys
+
+# Add project root to path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(current_dir))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import torch
 import torch.nn as nn
 from typing import Dict, List, Any, Optional, Tuple
@@ -11,7 +20,8 @@ import json
 import numpy as np
 from tqdm import tqdm
 
-from core.implicit_field import CompressionConfig, FieldArchitecture
+from configs.config import CompressionConfig
+from core.implicit_field import ImplicitWeightField
 from core.siren import SIREN
 from core.positional_encoding import FourierFeatures, HashEncoding
 from compression import compress_model
