@@ -274,6 +274,7 @@ flamegraph.svg
 *-blx.bib
 *.run.xml
 CLAUDE.md
+.claude
 
 ## Keep Important Files
 !requirements.txt
