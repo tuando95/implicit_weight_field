@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  implicit-weight-field:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: implicit-weight-field:latest
+    container_name: iwf-experiments
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+      - WANDB_API_KEY=${WANDB_API_KEY}
+    volumes:
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+      - ./logs:/workspace/logs
+      - ./checkpoints:/workspace/checkpoints
+    shm_size: '16gb'
+    stdin_open: true
+    tty: true
+    command: /bin/bash
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: implicit-weight-field:latest
+    container_name: iwf-jupyter
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - CUDA_VISIBLE_DEVICES=0
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/workspace/data
+      - ./results:/workspace/results
+      - ./notebooks:/workspace/notebooks
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root

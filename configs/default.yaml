@@ -1,0 +1,117 @@
+# Default configuration for implicit weight field experiments
+
+# Experiment settings
+experiment:
+  name: "default_experiment"
+  seed: 42
+  device: "cuda"
+  output_dir: "./results"
+  save_checkpoints: true
+  wandb:
+    enabled: false
+    project: "implicit-weight-fields"
+    entity: null
+
+# Compression settings
+compression:
+  bandwidth: 4
+  hidden_width: 256
+  num_layers: 2
+  w0: 30.0
+  learning_rate: 0.001
+  max_steps: 2000
+  convergence_threshold: 1.0e-6
+  regularization: 1.0e-6
+  architecture: null  # Auto-select
+
+# Inference settings
+inference:
+  mode: "preload"  # "preload" or "streaming"
+  cache:
+    max_size_mb: 100.0
+    prefetch_neighbors: true
+    prefetch_radius: 1
+    batch_size: 128
+
+# Model settings
+model:
+  name: "resnet50"  # Model to compress
+  pretrained: true
+  num_classes: 1000
+  dataset: "imagenet"
+
+# Dataset settings
+dataset:
+  name: "imagenet"
+  data_dir: "./data"
+  batch_size: 128
+  num_workers: 4
+  augment: false
+  validation_split: 0.1
+
+# Evaluation settings
+evaluation:
+  metrics:
+    - "accuracy"
+    - "compression_ratio"
+    - "inference_latency"
+    - "memory_usage"
+    - "reconstruction_quality"
+  batch_sizes: [1, 8, 32]
+  num_runs: 100
+  warmup_runs: 10
+
+# Baseline comparisons
+baselines:
+  enabled: true
+  methods:
+    - name: "quantization_int8"
+      config:
+        backend: "fbgemm"
+        per_channel: true
+    - name: "pruning"
+      config:
+        sparsity: [0.5, 0.8, 0.9]
+        fine_tune: false
+    - name: "tensor_train"
+      config:
+        rank: 8
+        explained_variance: 0.95
+
+# Ablation studies
+ablation:
+  enabled: false
+  studies:
+    - name: "architecture"
+      parameters:
+        depth: [1, 2, 3, 4]
+        width: [64, 128, 256, 512]
+        activation: ["siren", "relu", "swish"]
+    - name: "encoding"
+      parameters:
+        bandwidth: [1, 2, 4, 8, 16]
+        encoding_type: ["fourier", "hash", "none"]
+    - name: "training"
+      parameters:
+        learning_rate: [0.0001, 0.001, 0.01]
+        steps: [500, 1000, 2000, 5000]
+        optimizer: ["adam", "sgd", "adamw"]
+
+# Robustness evaluation
+robustness:
+  enabled: false
+  downstream_tasks:
+    - "fine_tuning"
+    - "transfer_learning"
+    - "few_shot"
+  adversarial:
+    enabled: true
+    attacks: ["fgsm", "pgd"]
+    epsilon: [0.01, 0.03, 0.1]
+
+# Reproducibility
+reproducibility:
+  deterministic: true
+  save_logs: true
+  save_configs: true
+  docker_image: "implicit-weight-field:latest"
