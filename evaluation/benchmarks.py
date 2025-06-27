@@ -288,7 +288,7 @@ def compare_inference_modes(
     Returns:
         Comparison results
     """
-    from ..inference import InferenceMode, create_inference_mode, CacheConfig
+    from inference import InferenceMode, create_inference_mode, CacheConfig
     
     if device is None:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -376,7 +376,7 @@ def analyze_memory_compute_tradeoff(
         logger.info(f"Testing memory budget: {budget}MB")
         
         # Configure cache for budget
-        from ..inference import CacheConfig, StreamingInference
+        from inference import CacheConfig, StreamingInference
         
         cache_config = CacheConfig(
             max_size_mb=budget * 0.8,  # 80% for cache, 20% for overhead

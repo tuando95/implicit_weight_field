@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 import logging
 
 from .cache import LRUWeightCache, CacheConfig
-from ..core.implicit_field import ImplicitWeightField, MultiScaleImplicitField
+from core.implicit_field import ImplicitWeightField, MultiScaleImplicitField
 
 
 logger = logging.getLogger(__name__)

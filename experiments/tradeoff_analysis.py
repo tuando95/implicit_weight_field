@@ -1,5 +1,14 @@
 """Compression-accuracy trade-off analysis."""
 
+import os
+import sys
+
+# Add project root to path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -12,12 +21,12 @@ from scipy.optimize import curve_fit
 from scipy.interpolate import interp1d
 import seaborn as sns
 
-from ..core.implicit_field import CompressionConfig
-from ..compression import compress_model
-from ..evaluation import evaluate_model_accuracy, evaluate_compression
-from ..baselines.quantization import quantize_model_int8
-from ..baselines.pruning import magnitude_prune
-from ..baselines.decomposition import tensor_train_decomposition
+from core.implicit_field import CompressionConfig
+from compression import compress_model
+from evaluation import evaluate_model_accuracy, evaluate_compression
+from baselines.quantization import quantize_model_int8
+from baselines.pruning import magnitude_prune
+from baselines.decomposition import tensor_train_decomposition
 
 logger = logging.getLogger(__name__)
 

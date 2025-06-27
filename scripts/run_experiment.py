@@ -37,7 +37,7 @@ from experiments.models import (
     load_bert_base, prepare_glue_dataset
 )
 from compression import compress_model, TrainingConfig
-from configs.config import CompressionConfig as CompConfig
+from core.implicit_field import CompressionConfig as CompConfig
 from evaluation import (
     evaluate_compression, evaluate_model_accuracy,
     evaluate_reconstruction_quality, benchmark_inference

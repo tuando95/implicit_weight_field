@@ -22,8 +22,7 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from tqdm import tqdm
 
-from core.implicit_field import ImplicitWeightField
-from configs.config import CompressionConfig
+from core.implicit_field import ImplicitWeightField, CompressionConfig
 from compression.trainer import FieldTrainer, TrainingConfig
 from experiments.models import (
     load_resnet50,

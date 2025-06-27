@@ -156,7 +156,7 @@ class LRUWeightCache:
         coord_tensor = torch.tensor(coord, device=self.device).unsqueeze(0)
         
         # Normalize coordinates
-        from ..core.positional_encoding import normalize_coordinates
+        from core.positional_encoding import normalize_coordinates
         normalized = normalize_coordinates(coord_tensor, tensor_shape)
         
         # Reconstruct
@@ -173,7 +173,7 @@ class LRUWeightCache:
     ) -> torch.Tensor:
         """Reconstruct batch of weights."""
         # Normalize coordinates
-        from ..core.positional_encoding import normalize_coordinates
+        from core.positional_encoding import normalize_coordinates
         normalized = normalize_coordinates(coords, tensor_shape)
         
         # Reconstruct in batches if needed

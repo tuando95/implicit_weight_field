@@ -1,5 +1,14 @@
 """Evaluation metrics for implicit weight field compression."""
 
+import os
+import sys
+
+# Add project root to path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import torch
 import torch.nn as nn
 import numpy as np
@@ -9,7 +18,7 @@ import time
 from scipy import stats
 from tqdm import tqdm
 
-from ..compression.compressor import CompressionResult
+from compression.compressor import CompressionResult
 
 
 @dataclass

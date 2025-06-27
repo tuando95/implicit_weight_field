@@ -1,5 +1,14 @@
 """Main compression pipeline implementing Algorithm 1 from CLAUDE.md."""
 
+import os
+import sys
+
+# Add project root to path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 import torch
 import torch.nn as nn
 from typing import Dict, List, Optional, Tuple, Union, Any
@@ -8,15 +17,15 @@ import logging
 from tqdm import tqdm
 import numpy as np
 
-from ..core.implicit_field import (
-    ImplicitWeightField,
+from core.implicit_field import (
+    ImplicitWeightField, 
     MultiScaleImplicitField,
     CompressionConfig,
     FieldArchitecture,
     TensorStatistics
 )
-from ..core.positional_encoding import generate_coordinate_grid
-from .trainer import FieldTrainer, TrainingConfig
+from core.positional_encoding import generate_coordinate_grid
+from compression.trainer import FieldTrainer, TrainingConfig
 
 
 logger = logging.getLogger(__name__)

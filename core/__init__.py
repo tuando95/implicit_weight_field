@@ -2,7 +2,13 @@
 
 from .siren import SIREN, SIRENLayer
 from .positional_encoding import FourierFeatures, positional_encoding
-from .implicit_field import ImplicitWeightField, MultiScaleImplicitField
+from .implicit_field import (
+    ImplicitWeightField, 
+    MultiScaleImplicitField,
+    FieldArchitecture,
+    TensorStatistics,
+    CompressionConfig
+)
 
 __all__ = [
     'SIREN',
@@ -10,5 +16,8 @@ __all__ = [
     'FourierFeatures',
     'positional_encoding',
     'ImplicitWeightField',
-    'MultiScaleImplicitField'
+    'MultiScaleImplicitField',
+    'FieldArchitecture',
+    'TensorStatistics',
+    'CompressionConfig'
 ]

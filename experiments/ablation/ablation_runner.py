@@ -20,8 +20,7 @@ import json
 import numpy as np
 from tqdm import tqdm
 
-from configs.config import CompressionConfig
-from core.implicit_field import ImplicitWeightField
+from core.implicit_field import ImplicitWeightField, CompressionConfig
 from core.siren import SIREN
 from core.positional_encoding import FourierFeatures, HashEncoding
 from compression import compress_model
