@@ -3,7 +3,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.utils.prune as prune
-from typing import List, Optional, Union, Tuple
+from typing import List, Optional, Union, Tuple,Any
 from dataclasses import dataclass
 import numpy as np
 import logging
