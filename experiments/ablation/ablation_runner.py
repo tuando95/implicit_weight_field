@@ -11,12 +11,12 @@ import json
 import numpy as np
 from tqdm import tqdm
 
-from ...core.implicit_field import CompressionConfig, FieldArchitecture
-from ...core.siren import SIREN
-from ...core.positional_encoding import FourierFeatures, HashEncoding
-from ...compression import compress_model
-from ...evaluation import evaluate_compression, evaluate_reconstruction_quality
-from ...compression.trainer import TrainingConfig
+from core.implicit_field import CompressionConfig, FieldArchitecture
+from core.siren import SIREN
+from core.positional_encoding import FourierFeatures, HashEncoding
+from compression import compress_model
+from evaluation import evaluate_compression, evaluate_reconstruction_quality
+from compression.trainer import TrainingConfig
 
 logger = logging.getLogger(__name__)
 
@@ -239,8 +239,8 @@ class ArchitectureAblation(AblationStudy):
         
         for name, tensor in test_tensors.items():
             # Create and train field
-            from ...core.implicit_field import ImplicitWeightField
-            from ...compression.trainer import FieldTrainer
+            from core.implicit_field import ImplicitWeightField
+            from compression.trainer import FieldTrainer
             
             field = ImplicitWeightField(
                 tensor_shape=tensor.shape,
@@ -387,8 +387,8 @@ class EncodingAblation(AblationStudy):
         """Evaluate configuration."""
         # Similar to architecture ablation
         import time
-        from ...core.implicit_field import ImplicitWeightField
-        from ...compression.trainer import FieldTrainer
+        from core.implicit_field import ImplicitWeightField
+        from compression.trainer import FieldTrainer
         
         total_compression = 0
         total_error = 0
@@ -533,8 +533,8 @@ class TrainingAblation(AblationStudy):
     ) -> AblationResult:
         """Evaluate training configuration."""
         import time
-        from ...core.implicit_field import ImplicitWeightField
-        from ...compression.trainer import FieldTrainer, TrainingConfig
+        from core.implicit_field import ImplicitWeightField
+        from compression.trainer import FieldTrainer, TrainingConfig
         
         results = []
         start_time = time.time()

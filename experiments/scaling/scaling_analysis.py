@@ -13,13 +13,13 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from tqdm import tqdm
 
-from ...core.implicit_field import (
+from core.implicit_field import (
     ImplicitWeightField,
     CompressionConfig,
     TensorStatistics
 )
-from ...compression.trainer import FieldTrainer, TrainingConfig
-from ...experiments.models import (
+from compression.trainer import FieldTrainer, TrainingConfig
+from experiments.models import (
     load_resnet50,
     load_mobilenet_v2,
     load_vit,
