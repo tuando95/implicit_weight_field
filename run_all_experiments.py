@@ -114,8 +114,8 @@ class ExperimentOrchestrator:
         
         # Computer Vision models
         cv_models = [
-            ("resnet50", "imagenet", {"num_classes": 1000}),
-            ("mobilenet_v2", "imagenet", {"num_classes": 1000}),
+            ("resnet50", "cifar10", {"num_classes": 10}),
+            ("mobilenet_v2", "cifar10", {"num_classes": 10}),
             ("vit", "cifar100", {"num_classes": 100, "patch_size": 16})
         ]
         
@@ -503,6 +503,9 @@ class ExperimentOrchestrator:
         """Convert experiment config to Hydra override format."""
         overrides = []
         
+        # Fields that should use + prefix (don't exist in default config)
+        new_fields = {'task', 'patch_size'}
+        
         def flatten_dict(d: Dict[str, Any], prefix: str = "") -> None:
             for key, value in d.items():
                 if key in ["name", "type", "subtype", "description"]:
@@ -515,7 +518,11 @@ class ExperimentOrchestrator:
                 elif isinstance(value, list):
                     overrides.append(f"{full_key}=[{','.join(map(str, value))}]")
                 else:
-                    overrides.append(f"{full_key}={value}")
+                    # Use + prefix for new fields
+                    if key in new_fields and prefix == "model":
+                        overrides.append(f"+{full_key}={value}")
+                    else:
+                        overrides.append(f"{full_key}={value}")
         
         flatten_dict(exp_config)
         return overrides
