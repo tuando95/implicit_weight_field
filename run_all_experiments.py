@@ -22,10 +22,18 @@ import hydra
 from hydra import compose, initialize_config_dir
 from tqdm import tqdm
 
-# Add project root to path
-project_root = os.path.dirname(os.path.abspath(__file__))
+# Add project root to path - handle both execution contexts
+current_file = os.path.abspath(__file__)
+project_root = os.path.dirname(current_file)
+
+# Ensure the project root is in the path
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
+    
+# Also add parent directory in case we're in a subdirectory
+parent_dir = os.path.dirname(project_root)
+if parent_dir not in sys.path and os.path.exists(os.path.join(parent_dir, 'experiments')):
+    sys.path.insert(0, parent_dir)
 
 from configs.config import Config, register_configs
 from scripts.run_experiment import main as run_single_experiment
