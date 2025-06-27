@@ -42,7 +42,7 @@ if project_root not in sys.path:
 
 from configs.config import Config, register_configs
 from scripts.run_experiment import main as run_single_experiment
-from utils import set_random_seed, setup_logging, create_results_dir
+from utils import set_random_seeds as set_random_seed, setup_logging
 
 logger = logging.getLogger(__name__)
 
