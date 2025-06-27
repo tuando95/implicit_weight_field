@@ -2,7 +2,12 @@
 
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Add parent directory to Python path to fix import issues
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -18,15 +23,26 @@ from experiments.models import (
     prepare_imagenet_loader, prepare_cifar_loader,
     load_bert_base, prepare_glue_dataset
 )
-from compression import compress_model, CompressionConfig as CompConfig
+from compression import compress_model, TrainingConfig as CompConfig
 from evaluation import (
     evaluate_compression, evaluate_model_accuracy,
-    evaluate_reconstruction_quality, benchmark_inference_latency
+    evaluate_reconstruction_quality, benchmark_inference
 )
+# Alias for compatibility
+benchmark_inference_latency = benchmark_inference
 from baselines.quantization import quantize_model_int8
 from baselines.pruning import magnitude_prune
 from baselines.decomposition import tensor_train_decomposition
-from inference import InferenceMode, create_inference_mode
+from inference import InferenceMode, PreloadInference, StreamingInference
+
+def create_inference_mode(mode: str, **kwargs):
+    """Create inference mode based on string."""
+    if mode == "preload":
+        return PreloadInference(**kwargs)
+    elif mode == "streaming":
+        return StreamingInference(**kwargs)
+    else:
+        raise ValueError(f"Unknown inference mode: {mode}")
 
 logger = logging.getLogger(__name__)
 
