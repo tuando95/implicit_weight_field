@@ -51,11 +51,23 @@ class ExperimentOrchestrator:
     """Orchestrates multiple experiments following CLAUDE.md specifications."""
     
     def __init__(self, base_config_path: str = "./configs", output_dir: str = "./results"):
-        self.base_config_path = Path(base_config_path)
+        # Ensure base_config_path is absolute
+        if os.path.isabs(base_config_path):
+            self.base_config_path = Path(base_config_path)
+        else:
+            self.base_config_path = Path(os.path.abspath(base_config_path))
+            
         self.output_dir = Path(output_dir)
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         self.results_dir = self.output_dir / f"full_experiments_{self.timestamp}"
         self.results_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Debug: print config path
+        logger.info(f"Using config path: {self.base_config_path}")
+        if not self.base_config_path.exists():
+            logger.error(f"Config path does not exist: {self.base_config_path}")
+        else:
+            logger.info(f"Config directory contents: {list(self.base_config_path.iterdir())}")
         
         # Setup logging
         self.setup_logging()
@@ -449,7 +461,9 @@ class ExperimentOrchestrator:
             hydra_config = self._convert_to_hydra_config(exp_config)
             
             # Run experiment using the existing infrastructure
-            with initialize_config_dir(config_dir=str(self.base_config_path)):
+            config_path = str(self.base_config_path.absolute())
+            logger.debug(f"Initializing Hydra with config path: {config_path}")
+            with initialize_config_dir(config_dir=config_path, version_base="1.1"):
                 cfg = compose(config_name="default", overrides=hydra_config)
                 
                 # Override output directory
