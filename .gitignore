@@ -85,7 +85,6 @@ compressed_models/
 ## Results and Outputs
 results/
 outputs/
-experiments/
 logs/
 *.log
 runs/

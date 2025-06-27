@@ -3,17 +3,24 @@
 import os
 import sys
 
-# Add parent directory to Python path to fix import issues
+# Fix import issues by finding the project root
 current_file = os.path.abspath(__file__)
 current_dir = os.path.dirname(current_file)
-parent_dir = os.path.dirname(current_dir)
 
-# Add both the parent and current directory to ensure imports work
-for path in [parent_dir, current_dir]:
-    if path not in sys.path:
-        sys.path.insert(0, path)
+# Go up directories until we find the project root (contains experiments directory)
+project_root = current_dir
+while project_root != os.path.dirname(project_root):  # Not at filesystem root
+    if os.path.exists(os.path.join(project_root, 'experiments')) and \
+       os.path.exists(os.path.join(project_root, 'compression')) and \
+       os.path.exists(os.path.join(project_root, 'evaluation')):
+        break
+    project_root = os.path.dirname(project_root)
 
-# Paths are set up for imports
+# Add project root to Python path
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+print(f"Project root found at: {project_root}")
 
 import hydra
 from omegaconf import DictConfig, OmegaConf
@@ -24,40 +31,11 @@ import json
 import time
 
 from configs.config import Config, register_configs
-# Try different import methods to handle various execution contexts
-try:
-    from experiments.models import (
-        load_resnet50, load_mobilenet_v2, load_vit,
-        prepare_imagenet_loader, prepare_cifar_loader,
-        load_bert_base, prepare_glue_dataset
-    )
-except ImportError:
-    try:
-        # Try importing from parent directory
-        sys.path.insert(0, os.path.dirname(parent_dir))
-        from experiments.models import (
-            load_resnet50, load_mobilenet_v2, load_vit,
-            prepare_imagenet_loader, prepare_cifar_loader,
-            load_bert_base, prepare_glue_dataset
-        )
-    except ImportError:
-        # If all else fails, try direct import
-        import importlib.util
-        models_path = os.path.join(parent_dir, 'experiments', 'models', '__init__.py')
-        if os.path.exists(models_path):
-            spec = importlib.util.spec_from_file_location("experiments.models", models_path)
-            models = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(models)
-            
-            load_resnet50 = models.load_resnet50
-            load_mobilenet_v2 = models.load_mobilenet_v2
-            load_vit = models.load_vit
-            prepare_imagenet_loader = models.prepare_imagenet_loader
-            prepare_cifar_loader = models.prepare_cifar_loader
-            load_bert_base = models.load_bert_base
-            prepare_glue_dataset = models.prepare_glue_dataset
-        else:
-            raise ImportError(f"Cannot find experiments.models module. Searched in: {models_path}")
+from experiments.models import (
+    load_resnet50, load_mobilenet_v2, load_vit,
+    prepare_imagenet_loader, prepare_cifar_loader,
+    load_bert_base, prepare_glue_dataset
+)
 from compression import compress_model, TrainingConfig as CompConfig
 from evaluation import (
     evaluate_compression, evaluate_model_accuracy,
