@@ -2,7 +2,7 @@
 
 import torch
 import torch.nn as nn
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, Tuple
 from enum import Enum
 from abc import ABC, abstractmethod
 import logging
