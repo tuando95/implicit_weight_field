@@ -239,8 +239,6 @@ compressed_weights/
 
 ## Debugging
 .gdb_history
-core
-core.*
 *.stackdump
 
 ## Performance Profiling
